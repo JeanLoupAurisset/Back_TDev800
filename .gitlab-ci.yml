@@ -1,7 +1,7 @@
 image: python:3.6.1
 
 services:
-    - postgres:12.2
+    - postgres:9.3
 
 variables:
   POSTGRES_DB: project_ci_test
