@@ -5,15 +5,14 @@ image: python:latest
 # Only needed when using a docker container to run your tests in.
 # Check out: http://docs.gitlab.com/ee/ci/docker/using_docker_images.html#what-is-a-service
 services:
-  - postgres:12.2-alpine
+  - postgres:latest
 variables:
   POSTGRES_DB: tdev_DB
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: "postgres"
   POSTGRES_HOST_AUTH_METHOD: trust
-  PG_PRIMARY_USER: postgres
   POSTGRES_PORT: 5432
-  POSTGRES_HOST: 127.0.0.1
+  POSTGRES_HOST: postgres
 
 # This folder is cached between builds
 # http://docs.gitlab.com/ee/ci/yaml/README.html#cache
@@ -44,9 +43,13 @@ before_script:
 # }
 #
 # and then adding `--settings app.settings.ci` (or similar) to the test command
-test_db:
+connect:
+  # Connect to PostgreSQL database as user postgres, without password
   script:
-    - echo "SELECT 'OK';" | sudo -u $POSTGRES_USER psql --host=$POSTGRES_HOST "hello_world_test"
+  - echo "SELECT 'OK';" | psql --user="postgres" --host=postgres "hello_world_test"
+  # official way to provide password to psql: http://www.postgresql.org/docs/9.3/static/libpq-envars.html
+  - export PGPASSWORD=$POSTGRES_PASSWORD
+  - psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
 test:
   variables:
     DATABASE_URL: "postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:5432/$POSTGRES_DB"
@@ -60,7 +63,6 @@ build:
   script:
     - cd api
     - python manage.py makemigrations
-    - python manage.py test
 deploy:
   variables:
     DATABASE_URL: "postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:5432/$POSTGRES_DB"
