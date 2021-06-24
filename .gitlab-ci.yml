@@ -23,33 +23,11 @@ cache:
 # This is a basic example for a gem or script which doesn't use
 # services such as redis or postgres
 before_script:
-  - python -V  # Print out python version for debugging
-  # Uncomment next line if your Django app needs a JS runtime:
-  # - apt-get update -q && apt-get install nodejs -yqq
+  - python -V
   - pip install -r requirements.txt
+  - su - postgres
+  - psql -c "Create database $POSTGRES_DB"
 
-# To get Django tests to work you may need to create a settings file using
-# the following DATABASES:
-#
-# DATABASES = {
-#     'default': {
-#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#        'NAME': 'ci',
-#        'USER': 'postgres',
-#        'PASSWORD': 'postgres',
-#        'HOST': 'postgres',
-#        'PORT': '5432',
-#    },
-# }
-#
-# and then adding `--settings app.settings.ci` (or similar) to the test command
-connect:
-  # Connect to PostgreSQL database as user postgres, without password
-  script:
-  - echo "SELECT 'OK';" | psql --user="postgres" --host=postgres "hello_world_test"
-  # official way to provide password to psql: http://www.postgresql.org/docs/9.3/static/libpq-envars.html
-  - export PGPASSWORD=$POSTGRES_PASSWORD
-  - psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
 test:
   variables:
     DATABASE_URL: "postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:5432/$POSTGRES_DB"
