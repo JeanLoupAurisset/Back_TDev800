@@ -1,15 +1,21 @@
 # Official framework image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/python
 image: python:latest
+image: postgres:latest
 
 # Pick zero or more services to be used on all builds.
 # Only needed when using a docker container to run your tests in.
 # Check out: http://docs.gitlab.com/ee/ci/docker/using_docker_images.html#what-is-a-service
 services:
-  - postgres:latest
-
+  - postgres:12.2-alpine
 variables:
   POSTGRES_DB: tdev_DB
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: "postgres"
+  POSTGRES_HOST_AUTH_METHOD: trust
+  PG_PRIMARY_USER: postgres
+  POSTGRES_PORT: 5432
+  POSTGRES_HOST: 127.0.0.1
 
 # This folder is cached between builds
 # http://docs.gitlab.com/ee/ci/yaml/README.html#cache
@@ -43,21 +49,21 @@ before_script:
 
 test:
   variables:
-    DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/$POSTGRES_DB"
+    DATABASE_URL: "postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:5432/$POSTGRES_DB"
   script:
     - cd api
     - python manage.py makemigrations
     - python manage.py test
 build:
   variables:
-    DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/$POSTGRES_DB"
+    DATABASE_URL: "postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:5432/$POSTGRES_DB"
   script:
     - cd api
     - python manage.py makemigrations
     - python manage.py test
 deploy:
   variables:
-    DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/$POSTGRES_DB"
+    DATABASE_URL: "postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:5432/$POSTGRES_DB"
   script:
     - cd api
     - python manage.py makemigrations
