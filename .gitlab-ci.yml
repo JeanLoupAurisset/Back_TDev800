@@ -1,18 +1,21 @@
-# Official framework image. Look for the different tagged releases at:
-# https://hub.docker.com/r/library/python
 image: python:latest
-# Pick zero or more services to be used on all builds.
-# Only needed when using a docker container to run your tests in.
-# Check out: http://docs.gitlab.com/ee/ci/docker/using_docker_images.html#what-is-a-service
+volumes:
+  local_postgres_data: {}
+  local_postgres_data_backups: {}
 services:
-  - postgres:latest
-variables:
-  POSTGRES_DB: tdev_DB
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: "postgres"
-  POSTGRES_HOST_AUTH_METHOD: trust
-  POSTGRES_PORT: 5432
-  POSTGRES_HOST: postgres
+  postgres:
+    build:
+      context: .
+      dockerfile: ./postgres/Dockerfile
+    image: tdev800api_production_postgres
+    container_name: postgres
+    volumes:
+      - local_postgres_data:/var/lib/postgresql/data:Z
+      - local_postgres_data_backups:/backups:z
+    env_file:
+      - ./postgres/.postgres
+    ports:
+      - "5432:5432"
 
 # This folder is cached between builds
 # http://docs.gitlab.com/ee/ci/yaml/README.html#cache
@@ -25,8 +28,6 @@ cache:
 before_script:
   - python -V
   - pip install -r requirements.txt
-  - su - postgres
-  - psql -c "Create database $POSTGRES_DB"
 
 test:
   variables:
