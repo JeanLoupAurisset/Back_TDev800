@@ -7,12 +7,10 @@ variables:
   POSTGRES_DB: project_ci_test
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: ""
-  POSTGRES_HOST: localhost
-  POSTGRES_PORT: 5432
 
 test:
     script:
-    - export DATABASE_URL=postgres://postgres:@localhost:5432/project_ci_test
+    - export DATABASE_URL=postgres://postgres:@postgres:5432/project_ci_test
     - apt-get update -qy
     - apt-get install -y python-dev python-pip
     - pip install -r requirements.txt
