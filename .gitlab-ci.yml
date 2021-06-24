@@ -7,6 +7,8 @@ variables:
   POSTGRES_DB: project_ci_test
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: ""
+  POSTGRES_HOST: localhost
+  POSTGRES_PORT: 5432
 
 test:
     script:
