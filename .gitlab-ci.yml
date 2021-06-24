@@ -63,10 +63,10 @@ build:
   script:
     - cd api
     - python manage.py makemigrations
-deploy:
-  variables:
-    DATABASE_URL: "postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:5432/$POSTGRES_DB"
-  script:
-    - cd api
-    - python manage.py makemigrations
-    - python manage.py runserver
+# deploy:
+#  variables:
+#    DATABASE_URL: "postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:5432/$POSTGRES_DB"
+#  script:
+#    - cd api
+#    - python manage.py makemigrations
+#    - python manage.py runserver
