@@ -1,8 +1,6 @@
 # Official framework image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/python
 image: python:latest
-image: postgres:latest
-
 # Pick zero or more services to be used on all builds.
 # Only needed when using a docker container to run your tests in.
 # Check out: http://docs.gitlab.com/ee/ci/docker/using_docker_images.html#what-is-a-service
@@ -46,7 +44,9 @@ before_script:
 # }
 #
 # and then adding `--settings app.settings.ci` (or similar) to the test command
-
+test_db:
+  script:
+    - echo "SELECT 'OK';" | sudo -u $POSTGRES_USER psql --host=$POSTGRES_HOST "hello_world_test"
 test:
   variables:
     DATABASE_URL: "postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:5432/$POSTGRES_DB"
