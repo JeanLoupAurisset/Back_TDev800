@@ -45,17 +45,20 @@ test:
   variables:
     DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/$POSTGRES_DB"
   script:
+    - cd api
     - python manage.py makemigrations
-    - python api/manage.py test
+    - python manage.py test
 build:
   variables:
     DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/$POSTGRES_DB"
   script:
+    - cd api
     - python manage.py makemigrations
-    - python api/manage.py test
+    - python manage.py test
 deploy:
   variables:
     DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/$POSTGRES_DB"
   script:
+    - cd api
     - python manage.py makemigrations
-    - python api/manage.py runserver
+    - python manage.py runserver
