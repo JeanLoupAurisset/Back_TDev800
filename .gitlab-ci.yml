@@ -10,7 +10,7 @@ variables:
 
 test:
     script:
-    - export DATABASE_URL=postgres://postgres:@postgres:5432/project_ci_test
+    - export DATABASE_URL=postgres://postgres:@localhost:5432/project_ci_test
     - apt-get update -qy
     - apt-get install -y python-dev python-pip
     - pip install -r requirements.txt
