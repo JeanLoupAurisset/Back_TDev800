@@ -1,0 +1,275 @@
+{
+	"info": {
+		"_postman_id": "c687b9fb-c650-4b47-88d2-7cf86b89e851",
+		"name": "Back end Cash Manager",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create user",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "gaetan14",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Bonjour78140",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://127.0.0.1:8000/user/",
+				"description": "Provide username and password to create a user"
+			},
+			"response": []
+		},
+		{
+			"name": "get token",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "gaetan14",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Bonjour78140",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://127.0.0.1:8000/api-token-auth/",
+				"description": "connect user to get a token"
+			},
+			"response": []
+		},
+		{
+			"name": "get user ",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": {
+						"value": "Token 286dee625a8e8d54164531988d0b069d64871fd8",
+						"in": "header",
+						"key": "Authorization"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:8000/user/",
+				"description": "give user details"
+			},
+			"response": []
+		},
+		{
+			"name": "logout user",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": {
+						"value": "Token 286dee625a8e8d54164531988d0b069d64871fd8",
+						"in": "header",
+						"key": "Authorization"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:8000/user/logout/",
+				"description": "use this route to logout (destruct Token). Provide a token."
+			},
+			"response": []
+		},
+		{
+			"name": "put user",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": {
+						"value": "Token 876caf0eaef2c21a15f252f8fe7ddd537c665937",
+						"in": "header",
+						"key": "Authorization"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "bonbklll",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Bonjour781",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": "http://127.0.0.1:8000/user/19/",
+				"description": "Change username. Need to provide token."
+			},
+			"response": []
+		},
+		{
+			"name": "set password user",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": {
+						"value": "Token 876caf0eaef2c21a15f252f8fe7ddd537c665937",
+						"in": "header",
+						"key": "Authorization"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "new_password",
+							"value": "bonjour7814",
+							"type": "text"
+						},
+						{
+							"key": "old_password",
+							"value": "Bonjour78140",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://127.0.0.1:8000/user/19/set_password/",
+				"description": "provide old and new password with token"
+			},
+			"response": []
+		},
+		{
+			"name": "create mop",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": {
+						"value": "Token 876caf0eaef2c21a15f252f8fe7ddd537c665937",
+						"in": "header",
+						"key": "Authorization"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "description",
+							"value": "bon",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://127.0.0.1:8000/mop/"
+			},
+			"response": []
+		},
+		{
+			"name": "update account",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": {
+						"value": "Token 876caf0eaef2c21a15f252f8fe7ddd537c665937",
+						"in": "header",
+						"key": "Authorization"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "money",
+							"value": "102",
+							"type": "text"
+						},
+						{
+							"key": "mop_id",
+							"value": "bon",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://127.0.0.1:8000/bank_account/3/"
+			},
+			"response": []
+		},
+		{
+			"name": "delete user",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": {
+						"value": "Token 876caf0eaef2c21a15f252f8fe7ddd537c665937",
+						"in": "header",
+						"key": "Authorization"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": "http://127.0.0.1:8000/user/19/",
+				"description": "delete the user connected \nhttp://127.0.0.1:8000/user/:id/"
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": {
+			"value": "Token 7378a99ab34034159a96fe55bfee075d3c4d89aa",
+			"key": "Authorization"
+		}
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "e9cca59b-fc7a-49f7-a7c9-100d300301f9",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "0f8e51cf-9249-48bc-ba70-5677d66b6823",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
