@@ -1,7 +1,7 @@
 image: python:3.6.1
 
 services:
-    - postgres:9.3
+    - postgres:latest
 
 variables:
   POSTGRES_DB: project_ci_test
@@ -16,4 +16,4 @@ test:
     - pip install -r requirements.txt
     - python api/manage.py makemigrations
     - python api/manage.py migrate
-    - python api/manage.py test Project
+    - python api/manage.py test
