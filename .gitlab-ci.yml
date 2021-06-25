@@ -18,5 +18,12 @@ test:
     script:
     - python api/manage.py test tdev800
 deploy:
-    script:
+  stage: deploy
+  script:
+    - echo "Deploy to production server"
     - python api/manage.py runserver
+  environment:
+    name: production
+    url: https://tdev800.com
+    kubernetes:
+      namespace: production
