@@ -70,7 +70,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'CashManagerBackEnd.urls'
+ROOT_URLCONF = 'pictBackEnd.urls'
 
 TEMPLATES = [
     {
