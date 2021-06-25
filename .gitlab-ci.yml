@@ -17,3 +17,6 @@ before_script:
 test:
     script:
     - python api/manage.py test tdev800
+deploy:
+    script:
+    - python api/manage.py runserver
