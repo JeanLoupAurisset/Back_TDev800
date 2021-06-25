@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tdev800'
 ]
 
 MIDDLEWARE = [
@@ -49,7 +50,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'api.urls'
+ROOT_URLCONF = 'tdev800.urls'
 
 TEMPLATES = [
     {
@@ -67,30 +68,22 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'api.wsgi.application'
+WSGI_APPLICATION = 'tdev800.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-
     'default': {
-
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-
-        'NAME': 'tdev_DB',
-
-        'USER': 'postgres',
-
-        'PASSWORD': 'postgres',
-
-        'HOST': 'postgres',
-
-        'PORT': '5432',
+        'ENGINE' : 'django.db.backends.postgresql_psycopg2',
+        'NAME' : 'project_ci_test',
+        'USER' : 'postgres',
+        'PASSWORD': '',
+        'HOST' : 'postgres',
+        'PORT' : '5432'
 
     }
-
 }
 
 
