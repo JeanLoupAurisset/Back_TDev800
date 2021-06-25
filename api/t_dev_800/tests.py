@@ -1,5 +1,5 @@
 from django.test import TestCase
-from api.models import album
+from t_dev_800.models import album
 
 class AnimalTestCase(TestCase):
     """
