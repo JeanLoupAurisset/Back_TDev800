@@ -16,4 +16,4 @@ before_script:
   - python api/manage.py migrate
 test:
     script:
-    - python api/manage.py test t_dev_800
+    - python api/manage.py test tdev800
