@@ -12,8 +12,8 @@ before_script:
   - apt-get update -qy
   - apt-get install -y python-dev python-pip
   - pip install -r requirements.txt
-  - python tdev800/manage.py makemigrations
-  - python tdev800/manage.py migrate
+  - python api/manage.py makemigrations
+  - python api/manage.py migrate
 test:
     script:
-    - python tdev800/manage.py test t_dev_800
+    - python api/manage.py test t_dev_800
