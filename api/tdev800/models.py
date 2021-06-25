@@ -35,10 +35,14 @@ class metadata(models.Model):
     id_photo = models.ForeignKey(photo, on_delete=models.CASCADE)
 
 class regrouper(models.Model):
-    id_photo = models.ForeignKey(photo, on_delete=models.CASCADE, primary_key=True)
-    id_album = models.ForeignKey(album, on_delete=models.CASCADE, primary_key=True)
+    id_photo = models.ForeignKey(photo, on_delete=models.CASCADE)
+    id_album = models.ForeignKey(album, on_delete=models.CASCADE)
+    class Meta:
+        unique_together = (("id_photo", "id_album"),)
 
 class posseder(models.Model):
-    id_utilisateur = models.ForeignKey(utilisateur, on_delete=models.CASCADE, primary_key=True)
-    id_device = models.ForeignKey(device, on_delete=models.CASCADE, primary_key=True)
+    id_utilisateur = models.ForeignKey(utilisateur, on_delete=models.CASCADE)
+    id_device = models.ForeignKey(device, on_delete=models.CASCADE)
     date_ajout = models.DateField()
+    class Meta:
+        unique_together = (("id_utilisateur", "id_device"),)
