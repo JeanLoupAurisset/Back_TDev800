@@ -22,6 +22,7 @@ build:
     - docker build -t registry.gitlab.com/bigshoes/django .
     - docker push registry.gitlab.com/bigshoes/django
 
+
 deploy:
   stage: deploy
   before_script:
