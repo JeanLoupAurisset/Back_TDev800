@@ -14,7 +14,7 @@ services:
       - web
 
   web:
-    image: registry.gitlab.com/your_username/your_project_name:latest
+    image: registry.gitlab.com/BigShoes/django:latest
     build:
       context: .
     container_name: web
@@ -47,7 +47,7 @@ services:
       - "5672:5672"
 
   celery:
-    image: registry.gitlab.com/your_username/your_project_name:latest
+    image: registry.gitlab.com/BigShoes/django:latest
     build:
       context: .
     container_name: cl01
