@@ -1,0 +1,21 @@
+version: '3'
+  web:
+    image: registry.gitlab.com/bigshoes/django:latest
+    build:
+      context: .
+    container_name: web
+    ports:
+      - '8000:8000'
+    command: bash -c 'python api/manage.py makemigrations tdev800 --noinput && python api/manage.py runserver'
+    depends_on:
+      - postgres
+    volumes:
+      - ./static:/static
+      - ./media:/media/
+    env_file: .env
+    links:
+      - postgres
+  postgres:
+    restart: always
+    image: postgres:12
+    container_name: postgres
