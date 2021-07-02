@@ -8,11 +8,11 @@ WORKDIR ${APP_ROOT}
 
 RUN apt-get update
 
-RUN pip3 install -U pip
+RUN pip install -U pip
 
 COPY requirements.txt ${APP_ROOT}/requirements.txt
 
-RUN pip3 install -r ${APP_ROOT}/requirements.txt
+RUN pip install -r ${APP_ROOT}/requirements.txt
 
 # Set the working directory to /app
 WORKDIR ${APP_ROOT}
