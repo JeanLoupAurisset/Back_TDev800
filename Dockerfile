@@ -22,4 +22,4 @@ ADD . ${APP_ROOT}
 
 RUN chmod 775 -R ${APP_ROOT}
 
-CMD  ['python manage.py runserver']
+CMD  ['python3 manage.py collectstatic --noinput', '&&', '/bin/sh','-c','python manage.py runserver']

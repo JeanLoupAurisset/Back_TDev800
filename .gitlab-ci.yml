@@ -19,9 +19,10 @@ before_script:
 build:
   stage: build
   script:
-    - docker build -t registry.gitlab.com/bigshoes/django .
-    - docker push registry.gitlab.com/bigshoes/django
-
+    - docker build -t registry.gitlab.com/BigShoes/django/ .
+    - docker push registry.gitlab.com/BigShoes/django/
+  only:
+    - master
 
 deploy:
   stage: deploy
@@ -36,3 +37,5 @@ deploy:
   - ssh-keyscan -H 'gitlab.com' >> ~/.ssh/known_hosts
   script:
     - bash devops/deploy.sh
+  only:
+    - master
