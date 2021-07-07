@@ -19,7 +19,9 @@ build:
   script:
     - docker build -t registry.gitlab.com/bigshoes/django/djangopg api/.
     - docker push registry.gitlab.com/bigshoes/django/djangopg
-  only : master # pour squizer le build parceque c'est chiant et long
+  only : 
+    - master 
+# pour squizer le build parceque c'est chiant et long
 
 deploy:
   stage: deploy
