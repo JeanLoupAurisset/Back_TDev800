@@ -9,7 +9,6 @@ RUN apt-get install -y libpq-dev
 # Note: The official Debian and Ubuntu images automatically ``apt-get clean``
 # after each ``apt-get``
 # Django rest install
-RUN pwd
 RUN mkdir api
 RUN cd api 
 COPY . .

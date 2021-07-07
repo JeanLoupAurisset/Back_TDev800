@@ -23,7 +23,7 @@ build:
 deploy:
   stage: deploy
   before_script:
-  - apt install -y sshpass
+  - apt-get update -qq && apt-get install -y -qq sshpass
   - apk add --no-cache openssh-client bash
   - mkdir -p ~/.ssh
   - echo "$DEPLOY_KEY" | tr -d '\r' > ~/.ssh/id_rsa
