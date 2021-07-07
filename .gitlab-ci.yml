@@ -12,14 +12,12 @@ variables:
   DOCKER_DRIVER: overlay2
 
 before_script:
-  - apk add --update py-pip &&
-      pip install docker-compose
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
 
 build:
   stage: build
   script:
-    - docker build -t djangopg .
+    - docker build -t api/djangopg .
     - docker push registry.gitlab.com/BigShoes/django/djangopg:latest
 
 deploy:
