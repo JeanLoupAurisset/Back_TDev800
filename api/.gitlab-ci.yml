@@ -19,8 +19,8 @@ before_script:
 build:
   stage: build
   script:
-    - sudo docker-compose run web django-admin startproject api .
-    - docker push registry.gitlab.com/BigShoes/django/
+    - docker build -t djangopg .
+    - docker push registry.gitlab.com/BigShoes/django/djangopg:latest
 
 deploy:
   stage: deploy

@@ -80,7 +80,7 @@ DATABASES = {
         'NAME' : 'project_ci_test',
         'USER' : 'postgres',
         'PASSWORD': '',
-        'HOST' : 'postgres',
+        'HOST' : '0.0.0.0',
         'PORT' : '5432'
 
     }
