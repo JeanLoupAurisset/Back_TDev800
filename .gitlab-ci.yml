@@ -18,7 +18,7 @@ build:
   stage: build
   script:
     - docker build -t api/djangopg .
-    - docker push registry.gitlab.com/BigShoes/django/
+    - docker push registry.gitlab.com/BigShoes/django:latest
 
 deploy:
   stage: deploy
