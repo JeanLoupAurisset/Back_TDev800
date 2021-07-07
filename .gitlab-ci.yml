@@ -32,4 +32,4 @@ deploy:
   - ssh-add ~/.ssh/id_rsa
   - ssh-keyscan -H 'gitlab.com' >> ~/.ssh/known_hosts
   script:
-    - bash devops/deploy.sh
+    - bash api/devops/deploy.sh
