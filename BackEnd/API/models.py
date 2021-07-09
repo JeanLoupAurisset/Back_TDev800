@@ -3,15 +3,19 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-class BankAccount(models.Model):
-    money = models.FloatField(default=100.0)
-    count = models.IntegerField(default=0)
-    blocked = models.BooleanField(default=False)
-    users = models.ForeignKey(User, on_delete=models.CASCADE)
+class Album(models.Model):
+    name = models.CharField(default='Card', max_length=100, unique=True)
+    Access_public = models.BooleanField(default=False)
+    user = models.ForeignKey(User, related_name='user_id', on_delete=models.CASCADE)
 
-class MeansOfPayment(models.Model):
-    description = models.CharField(default='Card', max_length=100, unique=True)
-    users = models.ForeignKey(User, on_delete=models.CASCADE)
+class Photo(models.Model):
+    images = models.ImageField()
+    name = models.CharField(default='Card', max_length=100, unique=True)
+    album = models.ForeignKey(Album,  related_name='photos', on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.description
+class MetaData(models.Model):
+    type = models.CharField(default='Card', max_length=100, unique=True)
+    valeur = models.CharField(default='Card', max_length=100, unique=True)
+    mode_acquisition = models.CharField(default='Card', max_length=100, unique=False)
+    date_ajout = models.DateField(auto_now=True)
+    photo = models.ForeignKey(Photo, related_name='metadatas', on_delete=models.CASCADE)

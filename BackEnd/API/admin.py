@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import MeansOfPayment, BankAccount
+from .models import Album, Photo, MetaData
 
 # Register your models here.
 
-for model in [MeansOfPayment, BankAccount]:
+for model in [Album, Photo, MetaData]:
     admin.site.register(model)

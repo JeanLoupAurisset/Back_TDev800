@@ -1,17 +1,15 @@
 from rest_framework import viewsets
-from django.contrib.auth.hashers import make_password
-from rest_framework.decorators import action, permission_classes, api_view
-from .serializers import MeansOfPaymentSerializer, UserSerializer, PasswordSerializer, BankAccountSerializer
-from .models import MeansOfPayment, BankAccount
+from rest_framework.decorators import action
+from .serializers import AlbumSerializer, UserSerializer, PasswordSerializer, PasswordSerializer, PhotoSerializer, MetaDataSerializer
+from .models import Album, Photo, MetaData
 from django.contrib.auth.models import User
-from rest_framework import generics
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.throttling import UserRateThrottle
+from django.core.exceptions import ObjectDoesNotExist
 
 class CustomAuthToken(ObtainAuthToken):
     throttle_classes = [UserRateThrottle]
@@ -21,12 +19,10 @@ class CustomAuthToken(ObtainAuthToken):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
-        bank_account = BankAccount.objects.get(users=user.pk)
         return Response({
             'token': token.key,
             'user_id': user.pk,
-            'email': user.email,
-            'bank_id': bank_account.pk
+            'email': user.email
         })
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -40,11 +36,17 @@ class UserViewSet(viewsets.ModelViewSet):
         elif self.action == 'logout':
             return [permissions.IsAuthenticated(), ]  
         elif self.action == 'destroy':
-            return [permissions.IsAuthenticated(), ]  
+            return [permissions.IsAuthenticated(), ]   
+        elif self.action == 'get_queryset':
+            return [permissions.IsAuthenticated(),]
         return super(UserViewSet, self).get_permissions()
 
+    @action(detail=False)
     def get_queryset(self):
+
         user = self.request.user
+        if (username := self.request.GET.get('username')) is not None:
+            return User.objects.filter(username__contains=username).values('username')
         return User.objects.filter(id=user.id)
     
     @action(detail=False)
@@ -88,55 +90,57 @@ class UserViewSet(viewsets.ModelViewSet):
         self.perform_update(serializer)
         return Response(serializer.data)
 
-class MeansOfPaymentViewSet(viewsets.ModelViewSet):
-    queryset = MeansOfPayment.objects.all()
-    serializer_class = MeansOfPaymentSerializer
+
+class AlbumViewSet(viewsets.ModelViewSet):
+    queryset = Album.objects.all()
+    serializer_class = AlbumSerializer
     throttle_classes = [UserRateThrottle]
 
+    def get_permissions(self):
+        if self.action == 'create':
+            return [permissions.IsAuthenticated(), ]       
+        elif self.action == 'destroy':
+            return [permissions.IsAuthenticated(), ]   
+        elif self.action == 'get_queryset':
+            return [permissions.IsAuthenticated(), ]
+        return super(AlbumViewSet, self).get_permissions()
+
+    @action(detail=False)
     def get_queryset(self):
+
         user = self.request.user
-        return MeansOfPayment.objects.filter(users_id=user.id)
-
-    def destroy(self, request, *args, **kwargs):
-        user_id = request.user
-        mop_id = request.data
-        try:
-            mop = MeansOfPayment.objects.get(id=mop_id.id)
-            mop.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        except Exception:
-            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        if (name := self.request.GET.get('name')) is not None:
+            return Album.objects.filter(name__contains=name).filter(Access_public__contains="true")
+        return Album.objects.filter(user_id=user.id)
 
 
-class BankAccountViewSet(viewsets.ModelViewSet):
-    queryset = BankAccount.objects.all()
-    serializer_class = BankAccountSerializer
+class PhotoViewSet(viewsets.ModelViewSet):
+    queryset = Photo.objects.all()
+    serializer_class = PhotoSerializer
     throttle_classes = [UserRateThrottle]
+    http_method_names = ['post', 'delete', 'put']
 
-    def get_queryset(self,):
-        user = self.request.user
-        return BankAccount.objects.filter(users_id=user.id)
-
-    def update(self, request, *args, **kwargs):
-        user = self.request.user
-
-        # We get the mops associated to the user
-        obj = MeansOfPayment.objects.filter(users_id=user.id)
-        myDict = dict(request.data)
-        
-        # If mop in request is not in db we return an error
-        if myDict['mop_description'][0] in [i.description for i in obj]:
-            partial = True # Here I change partial to True
-            instance = self.get_object()
-            serializer = self.get_serializer(instance, data=request.data, partial=partial)
-            serializer.is_valid(raise_exception=True)
-            self.perform_update(serializer)
-            return Response(serializer.data)
-
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+    def get_permissions(self):
+        if self.action == 'create':
+            return [permissions.IsAuthenticated(), ]    
+        elif self.action == 'destroy':
+            return [permissions.IsAuthenticated(), ]   
+        elif self.action == 'update':
+            return [permissions.IsAuthenticated(), ]      
+        return super(PhotoViewSet, self).get_permissions()
 
 
+class MetaDataViewSet(viewsets.ModelViewSet):
+    queryset = MetaData.objects.all()
+    serializer_class = MetaDataSerializer
+    throttle_classes = [UserRateThrottle]
+    http_method_names = ['post', 'delete', 'put']
 
+    def get_permissions(self):
+        if self.action == 'create':
+            return [permissions.IsAuthenticated(), ]    
+        elif self.action == 'destroy':
+            return [permissions.IsAuthenticated(), ]   
+        elif self.action == 'update':
+            return [permissions.IsAuthenticated(), ]      
+        return super(MetaDataViewSet, self).get_permissions()
