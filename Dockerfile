@@ -9,13 +9,11 @@ RUN apt-get install -y libpq-dev
 # Note: The official Debian and Ubuntu images automatically ``apt-get clean``
 # after each ``apt-get``
 # Django rest install
-RUN mkdir BackEnd
-RUN cd BackEnd 
 COPY . .
 RUN pip3 install psycopg2
 RUN pip3 install django
 RUN pip3 install djangorestframework
-
+ENV WORKDIR=$(pwd)
 # Run the rest of the commands as the ``postgres`` user created by the ``postgres-9.3`` package when it was ``apt-get installed``
 USER postgres
 
