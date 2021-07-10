@@ -57,7 +57,8 @@ class UserViewSet(viewsets.ModelViewSet):
         """
 
         user = self.request.user
-        if (username := self.request.GET.get('username')) is not None:
+        username = self.request.GET.get('username')
+        if username is not None:
             return User.objects.filter(username__contains=username).values('username')
         return User.objects.filter(id=user.id)
     
