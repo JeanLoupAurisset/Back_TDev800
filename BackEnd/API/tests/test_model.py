@@ -1,6 +1,6 @@
 from .test_setup import TestSetUp
 from rest_framework import status as s
-from API.models import MeansOfPayment, User, BankAccount
+from API.models import Photo, User, Album
 from random import randint
 
 
@@ -87,7 +87,7 @@ class TestModel(TestSetUp):
 
 
 
-    def test_means_of_payment_creation(self):
+    def test_album_creation(self):
 
         # User creation
         userID = randint(1, 10)
@@ -97,30 +97,31 @@ class TestModel(TestSetUp):
         # User getting
         usr = User.objects.get(id=userID)
 
-        # Mop creation
-        mopID = randint(1,10)
-        mop_data = {
-            "description": "mop_desc",
+        # album creation
+        albumID = randint(1,10)
+        album_data = {
+            "Access_public": True,
+            "description": "desc",
             "user_id": userID
         }
-        MeansOfPayment.objects.create(id=mopID, description="desc", users_id=mop_data["user_id"])
+        Album.objects.create(id=albumID, name="desc", Access_public=True, user_id=album_data["user_id"])
 
-        # Mop getting
-        mop = MeansOfPayment.objects.get(id=mopID)
+        # album getting
+        album = Album.objects.get(id=albumID)
 
         # USER ID
         # - is correct
-        self.assertEqual(mop.users_id,usr.id)
+        self.assertEqual(album.user_id, usr.id)
 
-        # DESCRIPTION
+        # NAME
         # - is correct
-        self.assertEqual(mop.description, mop.description)
+        self.assertEqual(album.name, album.name)
 
         # ID
         # - id correct
-        self.assertEqual(mop.id, mopID)
+        self.assertEqual(album.id, albumID)
 
-    def test_bank_account_creation(self):
+    def test_photo_creation(self):
         # User creation
         userID = randint(1, 10)
         User.objects.create_user(id=userID, username=self.user_data["username"], email=self.user_data["email"],
@@ -129,17 +130,25 @@ class TestModel(TestSetUp):
         # User getting
         usr = User.objects.get(id=userID)
 
-        # Bank account creation
-        baID = randint(1,10)
-        BankAccount.objects.create(id = baID, users_id = userID)
+        albumID = randint(1,10)
+        album_data = {
+            "Access_public": True,
+            "description": "desc",
+            "user_id": userID
+        }
+        Album.objects.create(id=albumID, name="desc", Access_public=True, user_id=album_data["user_id"])
 
-        # Bank account getting
-        ba = BankAccount.objects.get(id = baID)
+        # photo creation
+        photoID = randint(1,10)
+        Photo.objects.create(id = photoID, name='test', album_id = albumID)
 
-        # USER IS
+        # photo getting
+        photo = Photo.objects.get(id = photoID)
+
+        # ALBUM IS
         # - is correct
-        self.assertEqual(ba.users_id, usr.id)
+        self.assertEqual(photo.album_id, albumID)
 
-        # MONEY
+        # NAME
         # - is correctly set to default value 100
-        self.assertEqual(ba.money, 100)
+        self.assertEqual(photo.name, 'test')

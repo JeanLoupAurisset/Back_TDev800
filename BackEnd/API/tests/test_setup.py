@@ -10,10 +10,11 @@ class TestSetUp(APITestCase):
     """
     def setUp(self):
         self.user_url = "/user/"
-        self.bankaccount_url = "/bank_account/"
+        self.album_url = "/album/"
         self.token_url = "/api-token-auth/"
         self.user_logout_url = "/user/logout/"
-        self.mop_url = "/mop/"
+        self.photo = "/photo/"
+        self.metadata = "/metadata/"
 
         self.user_data ={
             "username":"userTest",
@@ -22,9 +23,6 @@ class TestSetUp(APITestCase):
         }
 
         return super().setUp()
-
-
-
 
     def tearDown(self):
         return super().tearDown()

@@ -12,6 +12,9 @@ from rest_framework.throttling import UserRateThrottle
 from django.core.exceptions import ObjectDoesNotExist
 
 class CustomAuthToken(ObtainAuthToken):
+    """ Manages token
+    """
+
     throttle_classes = [UserRateThrottle]
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,
@@ -26,6 +29,10 @@ class CustomAuthToken(ObtainAuthToken):
         })
 
 class UserViewSet(viewsets.ModelViewSet):
+
+    """ Manages user actions
+    """
+
     queryset = User.objects.all()
     serializer_class = UserSerializer
     throttle_classes = [UserRateThrottle]
@@ -44,6 +51,11 @@ class UserViewSet(viewsets.ModelViewSet):
     @action(detail=False)
     def get_queryset(self):
 
+        """ if the get request has username parameter it gives all the users which contain username pattern. 
+        Usefull to find someone.
+        If not it gives its user information.
+        """
+
         user = self.request.user
         if (username := self.request.GET.get('username')) is not None:
             return User.objects.filter(username__contains=username).values('username')
@@ -56,6 +68,10 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def set_password(self, request, pk=None):
+
+        """ Set password. You need to provide ol and new one.
+        """
+
         user = self.get_object()
         serializer = PasswordSerializer(data=request.data)
 
@@ -108,6 +124,11 @@ class AlbumViewSet(viewsets.ModelViewSet):
     @action(detail=False)
     def get_queryset(self):
 
+        """ if the get request has name parameter it gives all the album which contain name pattern and not private. 
+        Usefull to find album.
+        If not it gives its user albums.
+        """
+        
         user = self.request.user
         if (name := self.request.GET.get('name')) is not None:
             return Album.objects.filter(name__contains=name).filter(Access_public__contains="true")
@@ -115,6 +136,11 @@ class AlbumViewSet(viewsets.ModelViewSet):
 
 
 class PhotoViewSet(viewsets.ModelViewSet):
+
+    
+    """ Can't get photo. you need to make get request from album routes.
+    """
+
     queryset = Photo.objects.all()
     serializer_class = PhotoSerializer
     throttle_classes = [UserRateThrottle]
@@ -131,6 +157,10 @@ class PhotoViewSet(viewsets.ModelViewSet):
 
 
 class MetaDataViewSet(viewsets.ModelViewSet):
+
+    """ Can't get metadata. you need to make get request from album routes.
+    """
+
     queryset = MetaData.objects.all()
     serializer_class = MetaDataSerializer
     throttle_classes = [UserRateThrottle]

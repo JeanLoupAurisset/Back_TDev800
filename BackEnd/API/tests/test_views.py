@@ -42,20 +42,6 @@ class TestViews(TestSetUp):
         # - - is correct
         self.assertEqual(res.data["username"], self.user_data["username"])
 
-        # - PASSWORD
-        # - - is in response
-        self.assertTrue("password" in res.data)
-
-        # - - is not stored in plain text
-        self.assertNotEqual(res.data["password"], self.user_data["password"])
-
-        # - URL
-        # - - is sent response
-        self.assertTrue("url" in res.data)
-
-        # - - is not empty
-        self.assertNotEqual(res.data["url"], "")
-
         # - USER ID
         # - - is sent back in response
         self.assertTrue("id" in res.data)
@@ -63,7 +49,7 @@ class TestViews(TestSetUp):
         # - - is not empty
         self.assertNotEqual(res.data["id"], "")
 
-    def test_user_can_be_deleted_with_write_token(self):
+    def test_user_can_be_deleted_with_right_token(self):
         # User creation
         cres = self.client.post(self.user_url, self.user_data)
 
@@ -125,16 +111,6 @@ class TestViews(TestSetUp):
         # - - is in response
         self.assertTrue("email" in res.data)
 
-        # - - is not empty
-        # self.assertNotEqual(res.data["email"], "")
-
-        # - BANK ID
-        # - - is in response
-        self.assertTrue("bank_id" in res.data)
-
-        # - - is not empty
-        self.assertNotEqual(res.data["bank_id"], "")
-
     def test_user_token_not_set_without_user_data(self):
         # Token creation
         res = self.client.post(self.token_url)
@@ -165,20 +141,6 @@ class TestViews(TestSetUp):
 
         # - - is correct
         self.assertEqual(res.data[0]["username"], self.user_data["username"])
-
-        # - PASSWORD
-        # - - is in response
-        self.assertTrue("password" in res.data[0].keys())
-
-        # - - is not stored in plain text
-        self.assertNotEqual(res.data[0]["password"], self.user_data["password"])
-
-        # - URL
-        # - - is sent response
-        self.assertTrue("url" in res.data[0].keys())
-
-        # - - is not empty
-        self.assertNotEqual(res.data[0]["url"], "")
 
         # - USER ID
         # - - is sent back in response
@@ -238,7 +200,6 @@ class TestViews(TestSetUp):
     def test_user_modify_informations_with_right_credentials(self):
         mod_data = {
             "username": "userTest_MODIFIED",
-            "email": "test@gmail.com_MODIFIED"
         }
 
         # User creation
@@ -258,6 +219,7 @@ class TestViews(TestSetUp):
 
     def test_user_modify_informations_with_incorrect_credentials(self):
         mod_data = {
+            "first_name": "test",
             "username": "userTest_MODIFIED",
             "email": "test@gmail.com_MODIFIED"
         }
@@ -320,229 +282,3 @@ class TestViews(TestSetUp):
 
         # Status test
         self.assertEqual(res.status_code, s.HTTP_401_UNAUTHORIZED)
-
-    def test_mean_of_payment_unique_creation(self):
-        """
-        TWO MOP WITH THE SAME MOP IS IMPOSSIBLE
-        """
-
-        # User creation
-        cres = self.client.post(self.user_url, self.user_data)
-
-        # Token creation
-        tres = self.client.post(self.token_url, self.user_data)
-
-        # Token setting
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + tres.data["token"])
-
-        # Mean of payment creation
-        mop_data = {
-            "description": "mop_desc"
-        }
-        res = self.client.post(self.mop_url, mop_data)
-
-        # Status test
-        self.assertEqual(res.status_code, s.HTTP_201_CREATED)
-
-    def test_mean_of_payment_double_creation(self):
-        """
-        TWO MOP WITH THE SAME MOP IS IMPOSSIBLE
-        """
-
-        # User creation
-        cres = self.client.post(self.user_url, self.user_data)
-
-        # Token creation
-        tres = self.client.post(self.token_url, self.user_data)
-
-        # Token setting
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + tres.data["token"])
-
-        # Means of payment creations
-        mop_data = {
-            "description": "mop_desc"
-        }
-        res = self.client.post(self.mop_url, mop_data)
-
-        res2 = self.client.post(self.mop_url, mop_data)
-
-        # Status tests
-        self.assertEqual(res.status_code, s.HTTP_201_CREATED)
-        self.assertEqual(res2.status_code, s.HTTP_400_BAD_REQUEST)
-
-        # Because 2 mop can't have the same description (which is stends for signature of the mop)
-
-    def test_payment_with_enough_money(self):
-        # User creation
-        cres = self.client.post(self.user_url, self.user_data)
-
-        # Token creation
-        tres = self.client.post(self.token_url, self.user_data)
-
-        # Token setting
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + tres.data["token"])
-
-        # Bank id for the user
-        bankID = tres.data["bank_id"]
-
-        # Mean of payment creation
-        mop_data = {
-            "description": "mop_desc"
-        }
-        mopres = self.client.post(self.mop_url, mop_data)
-
-        # Payment sending
-        payment_data = {
-            "money": "20",
-            "mop_description": "mop_desc"
-        }
-        fullURL = self.bankaccount_url + "{}/".format(bankID)
-        res = self.client.put(self.bankaccount_url + "{}/".format(bankID), payment_data)
-
-        # Status test
-        self.assertEqual(res.status_code, s.HTTP_200_OK)
-
-        # Body test
-
-        # - BANK ID
-        # - - is in response
-        self.assertTrue("id" in res.data)
-
-        # - - is correct
-        self.assertEqual(res.data["id"], tres.data["bank_id"])
-
-        # - MONEY LEFT
-        # - - is in response
-        self.assertTrue("id" in res.data)
-
-        # - USER ID
-        # - - is in response
-        self.assertTrue("users_id" in res.data)
-
-        # - - is correct
-        self.assertEqual(res.data["users_id"], cres.data["id"])
-
-    def test_payment_without_enough_money(self):
-        # User creation
-        cres = self.client.post(self.user_url, self.user_data)
-
-        # Token creation
-        tres = self.client.post(self.token_url, self.user_data)
-
-        # Token setting
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + tres.data["token"])
-
-        # Bank id for the user
-        bankID = tres.data["bank_id"]
-
-        # Mean of payment creation
-        mop_data = {
-            "description": "mop_desc"
-        }
-        mopres = self.client.post(self.mop_url, mop_data)
-
-        # Payment sending
-        payment_data = {
-            "money": "200",
-            "mop_description": mop_data["description"]
-        }
-        fullURL = self.bankaccount_url + "{}/".format(bankID)
-        res = self.client.put(self.bankaccount_url + "{}/".format(bankID), payment_data)
-
-        # Status test
-        self.assertEqual(res.status_code, s.HTTP_400_BAD_REQUEST)
-
-        # Body test
-        # - MONEY
-        # - - is in response
-        self.assertTrue("money" in res.data)
-
-        # - - is correct
-        self.assertEqual(str(res.data["money"][0]), "Not enough money")
-
-    def test_payment_with_high_bill(self):
-        # User creation
-        cres = self.client.post(self.user_url, self.user_data)
-
-        # Token creation
-        tres = self.client.post(self.token_url, self.user_data)
-
-        # Token setting
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + tres.data["token"])
-
-        # Bank id for the user
-        bankID = tres.data["bank_id"]
-
-        # Mean of payment creation
-        mop_data = {
-            "description": "mop_desc"
-        }
-        mopres = self.client.post(self.mop_url, mop_data)
-
-        # Payment sending
-        payment_data = {
-            "money": "1200",
-            "mop_description": mop_data["description"]
-        }
-        fullURL = self.bankaccount_url + "{}/".format(bankID)
-        res = self.client.put(self.bankaccount_url + "{}/".format(bankID), payment_data)
-
-        # Status test
-        self.assertEqual(res.status_code, s.HTTP_400_BAD_REQUEST)
-
-        # Body test
-        # - MONEY
-        # - - is in response
-        self.assertTrue("money" in res.data)
-
-        # - - is correct
-        self.assertEqual(str(res.data["money"][0]), "The bill is too high")
-
-    def test_payment_with_bank_blocked(self):
-        # User creation
-        cres = self.client.post(self.user_url, self.user_data)
-
-        # Token creation
-        tres = self.client.post(self.token_url, self.user_data)
-
-        # Token setting
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + tres.data["token"])
-
-        # Bank id for the user
-        bankID = tres.data["bank_id"]
-
-        # Mean of payment creation
-        mop_data = {
-            "description": "mop_desc"
-        }
-        mopres = self.client.post(self.mop_url, mop_data)
-
-        # Payment sending
-        payment_data = {
-            "money": "200",
-            "mop_description": mop_data["description"]
-        }
-        fullURL = self.bankaccount_url + "{}/".format(bankID)
-
-        for reiteration in [1,2,3,4]:
-            res = self.client.put(self.bankaccount_url + "{}/".format(bankID), payment_data)
-
-            # Status test
-            self.assertEqual(res.status_code, s.HTTP_400_BAD_REQUEST)
-
-            # Body test
-            # - MONEY
-            # - - is in response
-            self.assertTrue("money" in res.data)
-
-            # - - is correct
-            if reiteration < 3:
-                self.assertEqual(str(res.data["money"][0]), "Not enough money")
-            elif reiteration == 3:
-                self.assertEqual(str(res.data["money"][0]), "Your bank account has been blocked")
-            else:
-                self.assertEqual(str(res.data["money"][0]), "Your bank account is blocked")
-
-
-
-
