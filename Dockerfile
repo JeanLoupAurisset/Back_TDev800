@@ -3,7 +3,7 @@ FROM ubuntu:18.04
 RUN apt-get update 
 RUN apt-get install -y postgresql
 # RUN apt-get install -y screen
-RUN apt install -y python3.9
+RUN apt-get install -y python3.9
 RUN apt-get install -y python3-pip
 RUN apt-get install -y python-psycopg2
 RUN apt-get install -y libpq-dev
