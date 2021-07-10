@@ -28,10 +28,12 @@ test:
   stage: test
   script:
     - docker pull registry.gitlab.com/bigshoes/django/djangopg:latest
-    - docker run --name tdev800 -p 8000:8000 -d registry.gitlab.com/bigshoes/django/djangopg:latest
+    - docker run --name API -p 8000:8000 -d registry.gitlab.com/bigshoes/django/djangopg:latest
+    - docker exec -it API "python3 BackEnd/manage.py test"
 
 deploy:
   stage: deploy
   script:
     - docker pull registry.gitlab.com/bigshoes/django/djangopg:latest
     - docker run --name API -p 8000:8000 -d registry.gitlab.com/bigshoes/django/djangopg:latest
+    - docker exec -it API "python3 BackEnd/manage.py runserver 0.0.0.0:8000 --noreload"

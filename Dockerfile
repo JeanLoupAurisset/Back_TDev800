@@ -33,7 +33,7 @@ EXPOSE 8000
 VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
 
 # Set the default command to run when starting the container
-RUN /usr/lib/postgresql/10/bin/postgres -D /var/lib/postgresql/10/main -c config_file=/etc/postgresql/10/main/postgresql.conf
-RUN python3 BackEnd/manage.py migrate
-CMD ["python3", "BackEnd/manage.py", "runserver", "0.0.0.0:8000", "--noreload"]
-CMD ["python3", "BackEnd/manage.py", "test"]
+CMD ["/usr/lib/postgresql/10/bin/postgres", "-D", "/var/lib/postgresql/10/main", "-c", "config_file=/etc/postgresql/10/main/postgresql.conf"]
+CMD ["python3","BackEnd/manage.py","migrate"]
+
+
