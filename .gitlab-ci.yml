@@ -17,15 +17,21 @@ before_script:
 build:
   stage: build
   script:
-    - docker build -t registry.gitlab.com/bigshoes/django/djangopg BackEnd/.
+    - docker build -t registry.gitlab.com/bigshoes/django/djangopg .
     - docker push registry.gitlab.com/bigshoes/django/djangopg
   only : 
     - main
     - gaetan_dev
 # pour squizer le build parceque c'est chiant et long
 
+test:
+  stage: test
+  script:
+    - docker pull registry.gitlab.com/bigshoes/django/djangopg:latest
+    - docker run --name tdev800 -p 8000:8000 -d registry.gitlab.com/bigshoes/django/djangopg:latest
+
 deploy:
   stage: deploy
   script:
     - docker pull registry.gitlab.com/bigshoes/django/djangopg:latest
-    - docker run --name tdev800 -p 8000:8000 -d registry.gitlab.com/bigshoes/django/djangopg:latest
+    - docker run --name API -p 8000:8000 -d registry.gitlab.com/bigshoes/django/djangopg:latest
