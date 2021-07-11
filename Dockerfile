@@ -31,7 +31,4 @@ EXPOSE 8000
 VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
 
 # Set the default command to run when starting the container
-RUN service postgresql start
-CMD ["python3", "BackEnd/manage.py", "migrate"]
-
-
+CMD ["service","postgresql","start","&&","python3","/BackEnd/manage.py","migrate"]
