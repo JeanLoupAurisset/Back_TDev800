@@ -21,19 +21,16 @@ build:
     - docker push registry.gitlab.com/bigshoes/django/djangopg
   only : 
     - main
-    - gaetan_dev
 # pour squizer le build parceque c'est chiant et long
 
 test:
   stage: test
   script:
     - docker pull registry.gitlab.com/bigshoes/django/djangopg:latest
-    - docker run --name API -p 8000:8000 -d registry.gitlab.com/bigshoes/django/djangopg:latest
-    - docker exec -t API python3 $WORKDIR/BackEnd/manage.py test
+    - docker run --name API -d registry.gitlab.com/bigshoes/django/djangopg:latest python3 /BackEnd/manage.py test
 
 deploy:
   stage: deploy
   script:
     - docker pull registry.gitlab.com/bigshoes/django/djangopg:latest
-    - docker run --name API -p 8000:8000 -d registry.gitlab.com/bigshoes/django/djangopg:latest
-    - docker exec -t API python3 $WORKDIR/BackEnd/manage.py runserver 0.0.0.0:8000 --noreload
+    - docker run --name API -p 8000:8000 -d registry.gitlab.com/bigshoes/django/djangopg:latest python3 /BackEnd/manage.py runserver 0.0.0.0:8000 --noreload
