@@ -32,6 +32,6 @@ VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
 
 # Set the default command to run when starting the container
 CMD ["service", "postgresql", "start"]
-CMD ["python3", "BackEnd/manage.py", "migrate"]
+# CMD ["python3", "BackEnd/manage.py", "migrate"]
 
 
