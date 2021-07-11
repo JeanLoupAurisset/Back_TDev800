@@ -1,3 +1,4 @@
+
 """
 Django settings for pictBackEnd project.
 
@@ -99,9 +100,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'pict',
-        'USER': 'gaetd',
+        'USER': 'postgres',
         'PASSWORD': '',
-        'HOST': '',
+        'HOST': '0.0.0.0',
         'PORT': 5432,
     }
 }
