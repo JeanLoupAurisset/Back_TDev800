@@ -34,3 +34,5 @@ deploy:
   script:
     - docker pull registry.gitlab.com/bigshoes/django/djangopg:latest
     - docker run --name API -p 8000:8000 -d registry.gitlab.com/bigshoes/django/djangopg:latest python3 /BackEnd/manage.py runserver 0.0.0.0:8000 --noreload
+  only:
+    - main
