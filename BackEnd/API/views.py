@@ -131,7 +131,8 @@ class AlbumViewSet(viewsets.ModelViewSet):
         """
         
         user = self.request.user
-        if (name := self.request.GET.get('name')) is not None:
+        if self.request.GET.get('name') is not None:
+            name = self.request.GET.get('name')
             return Album.objects.filter(name__contains=name).filter(Access_public__contains="true")
         return Album.objects.filter(user_id=user.id)
 
